@@ -1,0 +1,10 @@
+version: "3"
+services:
+  python:
+    build: .
+    command: sh
+    volumes:
+      - ./:/usr/local/src
+      - $HOME/.ssh:/root/.ssh
+      - $HOME/.aws:/root/.aws
+    network_mode: host
