@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  graphql
+
+  Sample SAM Template for graphql
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+  Api:
+    Name: graphql-and-ip-api
+    EndpointConfiguration: REGIONAL
+
+
+Parameters:
+  LambdaExecRole:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/dev/ExecutionRoleARN"
+    Description: "The Lambda General Execution Role Policy"
+
+Resources:
+  GraphQlApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+
+  NodeJSFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: node/
+      AutoPublishAlias: nodeFunction
+      Handler: server.handler
+      Runtime: nodejs12.x
+      Role: !Ref LambdaExecRole
+      Events:
+        GetVersion:
+          Type: Api
+          Properties:
+            Path: /node
+            Method: get
+            RestApiId:
+              Ref: GraphQlApi
+
+Outputs:
+  APIEndpoint:
+    Description: "API dev stage endpoint"
+    Value: !Sub "https://${GraphQlApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
