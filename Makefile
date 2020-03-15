@@ -9,3 +9,4 @@ apply:
 clean:
 	rm -rf .terraform/
 	rm -rf *.tfplan
+	rm -rf .aws-sam
