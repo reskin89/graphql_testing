@@ -11,7 +11,7 @@ apply:
 build:
 	sam build -u 
 
-deploy: package
+deploy: build
 	sam deploy --stack-name $(app) --s3-bucket eskin-app-lambdas-$(env) --region us-east-1
 
 

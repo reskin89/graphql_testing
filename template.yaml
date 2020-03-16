@@ -5,13 +5,6 @@ Description: >
 
   Sample SAM Template for graphql
   
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
-Globals:
-  Function:
-    Timeout: 3
-  Api:
-    Name: graphql-and-ip-api
-    EndpointConfiguration: REGIONAL
 
 
 Parameters:
@@ -19,6 +12,22 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Default: "/dev/ExecutionRoleARN"
     Description: "The Lambda General Execution Role Policy"
+  UserPool:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/dev/userpoolArn"
+    Description: "Arn of the User Pool"
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+  Api:
+    Name: graphql-and-ip-api
+    EndpointConfiguration: REGIONAL
+    Auth:
+      DefaultAuthorizer: myIpAuthorizer
+      Authorizers:
+        myIpAuthorizer:
+          UserPoolArn: !Ref UserPool
 
 Resources:
   GraphQlApi:
