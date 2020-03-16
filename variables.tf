@@ -8,6 +8,6 @@ variable "global_tags" {
 
   default = {
     "CreatedBy" = "Terraform: reskin89/graphql_testing"
-    "Purpose" = "AWS Development"
+    "Purpose"   = "AWS Development"
   }
 }

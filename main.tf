@@ -6,6 +6,8 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 locals {
   global_tags = merge(
     var.global_tags,
