@@ -35,11 +35,11 @@ Resources:
     Properties:
       StageName: dev
 
-  NodeJSFunction:
+  GoWhatsMyIpFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: node/
-      AutoPublishAlias: nodeFunction
+      AutoPublishAlias: nodeIpFunc
       Handler: server.handler
       Runtime: nodejs12.x
       Role: !Ref LambdaExecRole
@@ -47,7 +47,7 @@ Resources:
         GetVersion:
           Type: Api
           Properties:
-            Path: /node
+            Path: /myip/node
             Method: get
             RestApiId:
               Ref: GraphQlApi
