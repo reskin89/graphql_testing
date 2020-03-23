@@ -8,11 +8,18 @@ apply:
 	terraform apply main.tfplan 
 
 #The SAMs
-build:
+gen-build:
 	sam build -u 
 
-deploy: build
-	sam deploy --stack-name $(app) --s3-bucket eskin-app-lambdas-$(env) --region us-east-1
+go-build:
+	cd golang/myip; \
+	GOOS=linux GOARCH=amd64 go build -o main main.go
+
+deploy: $(type)-build check-type
+	sam deploy --stack-name $(app) --s3-bucket eskin-app-lambdas-$(env) --region us-east-1 \
+	--parameter-overrides LambdaExecRole=/dev/ExecutionRoleARN \
+		UserPool=/dev/userpoolArn \
+	--capabilities CAPABILITY_IAM
 
 
 clean:
@@ -29,4 +36,9 @@ endif
 check-app:
 ifndef app
 	$(error Application Name is undefined)
+endif
+
+check-type:
+ifndef type
+	$(error app type undefined, expected gen or go)
 endif
